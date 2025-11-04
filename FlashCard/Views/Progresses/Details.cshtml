@@ -1,0 +1,42 @@
+﻿@model FlashCard.Models.Progress
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Progress</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Flashcard)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Flashcard.CardId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsKnown)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsKnown)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsAvailable)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsAvailable)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ProgressId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

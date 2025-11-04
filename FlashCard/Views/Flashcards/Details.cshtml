@@ -1,0 +1,42 @@
+﻿@model FlashCard.Models.Flashcard
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Flashcard</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FrontFlash)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FrontFlash)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BackFlash)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BackFlash)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Deck)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Deck.DeckId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.CardId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
