@@ -1,12 +1,14 @@
 ﻿using FlashCard.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace FlashCard.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly FlashcardDbContext _context;
@@ -17,8 +19,13 @@ namespace FlashCard.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> UsersIndex()
         {
+            if(User.FindFirstValue(ClaimTypes.Email) != "admin@gmail.com")
+            {
+                ModelState.AddModelError("", "Sai thông tin đăng nhập vào admin.");
+                return RedirectToAction("Login", "Users");
+            }
             return View(await _context.Users.ToListAsync());
         }
 

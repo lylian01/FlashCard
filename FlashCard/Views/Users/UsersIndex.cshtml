@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<FlashCard.Models.User>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "UsersIndex";
 }
 
-<h1>Index</h1>
+<h1>UsersIndex</h1>
 
 <p>
     <a asp-action="Register">Create New</a>
@@ -36,11 +36,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
-            </td>
+                @if(item.Email == "admin@gmail.com")
+                {
+                    <td> Ko có quyền thực hiện thao tác với tài khoản admin</td>
+                }
+                else
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                    </td>
+                }
         </tr>
 }
     </tbody>
