@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FlashCard.Models
@@ -7,11 +8,13 @@ namespace FlashCard.Models
     {
         [Key]
         public int CardId { get; set; }
-        public string FrontFlash { get; set; } = string.Empty;
-        public string BackFlash { get; set; } = string.Empty;
+        public string CardTitle { get; set; } = string.Empty;
+        public string? CardDescription { get; set; }
+        public bool IsPublic { get; set; } = true;
+
 
         public int UserId { get; set; }
-        public User User { get; set; } = null!;
+        public User? User { get; set; }
 
         // Deck có thể null
         public int? DeckId { get; set; }
@@ -20,7 +23,8 @@ namespace FlashCard.Models
 
         // Quan hệ ngược lại với Progress
         public ICollection<Progress> Progresses { get; set; } = new List<Progress>();
-
+        // 1 flashcard có nhiều cặp thẻ cardPair
+        public List<CardPair> CardPairs { get; set; } = new List<CardPair>();
 
     }
 }

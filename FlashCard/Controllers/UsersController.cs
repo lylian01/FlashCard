@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 
 namespace FlashCard.Controllers
 {
-    [Authorize]
     public class UsersController : Controller
     {
         private readonly FlashcardDbContext _context;
@@ -19,6 +19,7 @@ namespace FlashCard.Controllers
         }
 
         // GET: Users
+        [Authorize]
         public async Task<IActionResult> UsersIndex()
         {
             if(User.FindFirstValue(ClaimTypes.Email) != "admin@gmail.com")
@@ -30,6 +31,7 @@ namespace FlashCard.Controllers
         }
 
         // GET: Users/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,6 +50,7 @@ namespace FlashCard.Controllers
         }
 
         // GET: Users/Register
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -56,6 +59,7 @@ namespace FlashCard.Controllers
         // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("UserId,Username,Email,Password")] User user)
@@ -74,13 +78,14 @@ namespace FlashCard.Controllers
             }
             return View(user);
         }
-
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
 
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(string Email, string Password)
         {
@@ -109,6 +114,7 @@ namespace FlashCard.Controllers
 
 
         // GET: Users/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -127,6 +133,7 @@ namespace FlashCard.Controllers
         // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,Email,Password")] User user)
@@ -160,6 +167,7 @@ namespace FlashCard.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -178,6 +186,7 @@ namespace FlashCard.Controllers
         }
 
         // POST: Users/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

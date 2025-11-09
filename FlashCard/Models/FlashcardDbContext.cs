@@ -13,6 +13,7 @@ namespace FlashCard.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Deck> Decks { get; set; }
         public DbSet<Flashcard> Flashcards { get; set; }
+        public DbSet<CardPair> CardPairs { get; set; }
         public DbSet<Progress> Progresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

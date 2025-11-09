@@ -1,0 +1,92 @@
+﻿@model IEnumerable<FlashCard.Models.Flashcard>
+
+@{
+    ViewData["Title"] = "UserIndex";
+}
+
+<h1>UserIndex</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<div class="card border border-1">   </div>
+@foreach (var item in Model)
+{
+    <div class="d-flex flex-row">
+        <div style="width: 80%">  
+            <div class="aItem card border border-1  m-2">
+                <a asp-action="Edit" asp-route-id="@item.CardId" class="d-flex flex-row">
+                    <div>@Html.DisplayFor(modelItem => item.CardId)</div>
+                    <div>@Html.DisplayFor(modelItem => item.CardTitle)</div>
+                    <div>@Html.DisplayFor(modelItem => item.IsPublic)</div>
+                    <div>@Html.DisplayFor(modelItem => item.Deck)</div>
+                    <div>@Html.DisplayFor(modelItem => item.CardPairs.Count)</div>
+                </a>
+            </div>
+        </div>
+        <div style="width:20%">
+            <form asp-action="Delete" asp-route-id="@item.CardId" method="post">
+                <input type="hidden" asp-for="@item.CardId" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </form>
+        
+        </div>
+    </div> 
+}
+
+
+
+
+@* <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CardId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CardTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CardDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPublic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deck)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr class="card">
+                <a asp-action="Edit" asp-route-id="@item.CardId">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CardId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CardTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CardDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPublic)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Deck.DeckName)
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.CardId">Delete</a>
+                    </td>
+                </a>
+            </tr>
+}
+    </tbody>
+</table> *@
+<script>
+    var item = document.getElementsByClassName("aItem")
+    item.
+</script>

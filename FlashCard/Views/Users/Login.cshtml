@@ -23,12 +23,7 @@
         <img class="img-logo" style="width:370px; height:150px" src="~/Image/logo_text.png" />
         <div class="col-md-6 col-sm-12">
             <form asp-action="Login">
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="text-danger">
-                        @ViewData.ModelState[string.Empty]?.Errors.FirstOrDefault()?.ErrorMessage
-                    </div>
-                }
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Email" class="control-label"></label>
                     <input asp-for="Email" class="form-control" />

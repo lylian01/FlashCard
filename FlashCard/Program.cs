@@ -14,9 +14,16 @@ builder.Services.AddDbContext<FlashcardDbContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Users/Login"; // Khi chưa login sẽ chuyển đến đây
-        options.AccessDeniedPath = "/Users/AccessDenied";
+        options.LoginPath = "/Users/Login";           // Trang login
+        options.LogoutPath = "/Home/Index";         // Trang logout
+        options.AccessDeniedPath = "/Shared/Error";   // Khi bị chặn
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None; // ⚠️ Cho phép chạy cả HTTP & HTTPS
+        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Chỉ chạy trên HTTPS
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.Name = "FlashCardAuth"; // đặt tên cookie riêng
     });
+
 
 var app = builder.Build();
 
@@ -24,7 +31,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Shared/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -33,9 +40,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-
-
 app.UseAuthentication();  
 app.UseAuthorization();   
 
