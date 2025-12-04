@@ -11,6 +11,7 @@ using FlashCard.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.WebSockets;
 
 
 namespace FlashCard.Controllers
@@ -26,10 +27,32 @@ namespace FlashCard.Controllers
         }
 
         // GET: Decks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> AdminIndex()
         {
-            var flashcardDbContext = _context.Decks.Include(d => d.User);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (userEmail != "admin@gmail.com")
+            {
+                ModelState.AddModelError("", "Sai thông tin đăng nhập vào admin.");
+                return RedirectToAction("Login", "Users");
+            }
+
+            var flashcardDbContext = _context.Decks.Include(f => f.User);
             return View(await flashcardDbContext.ToListAsync());
+        }
+        public async Task<IActionResult> UserIndex()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null)
+                return RedirectToAction("Login", "Users");
+
+            int userId = int.Parse(userIdString);
+
+            var decksByUser = await _context.Decks
+                .Include(d => d.Flashcards)              
+                .Where(d => d.UserId == userId)
+                .ToListAsync();
+
+            return View(decksByUser);
         }
 
         // GET: Decks/Details/5
@@ -72,7 +95,7 @@ namespace FlashCard.Controllers
 
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(UserIndex));
             }
             //ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", deck.UserId);
             return View(deck);
@@ -86,12 +109,16 @@ namespace FlashCard.Controllers
                 return NotFound();
             }
 
-            var deck = await _context.Decks.FindAsync(id);
+            var deck = await _context.Decks
+                .Include(d => d.Flashcards)
+                .Where(d => d.DeckId == id)
+                .ToListAsync();
+
             if (deck == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", deck.UserId);
+
             return View(deck);
         }
 
@@ -125,7 +152,7 @@ namespace FlashCard.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(UserIndex));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", deck.UserId);
             return View(deck);
@@ -156,13 +183,25 @@ namespace FlashCard.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var deck = await _context.Decks.FindAsync(id);
+            
             if (deck != null)
             {
+                var flashCard = await _context.Flashcards.Where(f => f.DeckId == id).ToListAsync();
+
+                if (flashCard != null)
+                {
+                    foreach(var fcard in flashCard)
+                    {
+                        fcard.DeckId = null;
+                        
+                    }
+                }
+
                 _context.Decks.Remove(deck);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(UserIndex));
         }
 
         private bool DeckExists(int id)

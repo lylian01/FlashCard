@@ -12,7 +12,7 @@ namespace FlashCard.Models
         public string? Description { get; set; } = string.Empty;
 
         public int UserId { get; set; }
-        public User User { get; set; } = null!;
+        public User? User { get; set; }
 
         public ICollection<Flashcard> Flashcards { get; set; } = new List<Flashcard>();
     }

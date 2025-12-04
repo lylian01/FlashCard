@@ -22,11 +22,13 @@ namespace FlashCard.Controllers
         [Authorize]
         public async Task<IActionResult> UsersIndex()
         {
-            if(User.FindFirstValue(ClaimTypes.Email) != "admin@gmail.com")
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (userEmail != "admin@gmail.com")
             {
                 ModelState.AddModelError("", "Sai thông tin đăng nhập vào admin.");
                 return RedirectToAction("Login", "Users");
             }
+
             return View(await _context.Users.ToListAsync());
         }
 

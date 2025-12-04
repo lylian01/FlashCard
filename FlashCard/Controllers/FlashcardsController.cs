@@ -78,8 +78,11 @@ namespace FlashCard.Controllers
         // GET: Flashcards/Create
         public IActionResult Create()
         {
-            ViewData["DeckId"] = new SelectList(_context.Decks, "DeckId", "DeckId");
-            ViewBag.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userIdString;
+            int userId = int.Parse(userIdString);
+
+            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckId");
 
             var flashcard = new Flashcard();
             flashcard.CardPairs.Add(new CardPair()); // nếu form có ít nhất 1 pair mặc định
@@ -121,8 +124,10 @@ namespace FlashCard.Controllers
             {
                 return NotFound();
             }
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int userId = int.Parse(userIdString);
 
-            ViewData["DeckId"] = new SelectList(_context.Decks, "DeckId", "DeckId", flashcard.DeckId);
+            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckId");
       
             return View(flashcard);
         }
