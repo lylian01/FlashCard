@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using FlashCard.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Security.Claims;
 
 namespace FlashCard.Controllers
 {
@@ -15,6 +16,9 @@ namespace FlashCard.Controllers
 
         public IActionResult Index()
         {
+            
+            ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewData["UserEmail"] = User.FindFirstValue(ClaimTypes.Email);
             return View();
         }
 

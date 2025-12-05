@@ -1,0 +1,102 @@
+﻿/* Root variables */
+@import url('./Root.css');
+body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #C8A47F22, var(--secondary));
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login card */
+.login-box {
+    width: 380px;
+    padding: 40px 35px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.login-box h2 {
+    margin: 0 0 25px;
+    color: var(--accent-dark);
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Input */
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--accent-dark);
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px !important;
+    border: 1px solid #C8A47F55;
+    background: #FFF;
+    outline: none;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input:focus {
+    border-color: var(--secondary-dark);
+    box-shadow: 0 0 0 3px #C8A47F33;
+}
+
+/* Button */
+.btn-login {
+    width: 100%;
+    background: var(--accent);
+    color: #FFF;
+    padding: 12px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s;
+}
+
+.btn-login:hover {
+    background: var(--accent-dark);
+}
+
+.btn-login:active {
+    transform: scale(0.97);
+}
+
+/* Extra link */
+.login-box .more {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--accent);
+}
+
+.login-box .more a {
+    color: var(--secondary-dark);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* error  */
+.error-box {
+ padding: 15px;
+ margin: 10px 0;
+ color: #a94442;
+ background-color: #f2dede;
+ border: 1px solid #ebccd1;
+ border-radius: 5px;
+}
