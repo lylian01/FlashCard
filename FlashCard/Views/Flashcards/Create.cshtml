@@ -1,104 +1,56 @@
-﻿@* @model FlashCard.Models.Flashcard
+﻿@model FlashCard.Models.Flashcard
 
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Create</h1>
-
-<h4>Flashcard</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FrontFlash" class="control-label"></label>
-                <input asp-for="FrontFlash" class="form-control" />
-                <span asp-validation-for="FrontFlash" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BackFlash" class="control-label"></label>
-                <input asp-for="BackFlash" class="form-control" />
-                <span asp-validation-for="BackFlash" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input type="number" asp-for="UserId" class="form-control" value="@ViewBag.UserId" readonly/>
-            </div>
-            <div class="form-group">
-                <label asp-for="DeckId" class="control-label"></label>
-                <select asp-for="DeckId" class ="form-control" asp-items="ViewBag.DeckId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-        <span>@ViewBag.ErrorT</span>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} 
-*@
-@model FlashCard.Models.Flashcard
-
-@{
-    ViewData["Title"] = "Create";
+@section Styles {
+    <link rel="stylesheet" href="~/css/FCCreate.css" />
 }
 
-<h2>Tạo Flashcard</h2>
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="UserId" class="control-label"></label>
-        <input type="number" asp-for="UserId" class="form-control" value="@ViewBag.UserId" readonly />
+<form asp-action="Create" method="post" class="card shadow-sm border-0 p-4">
+    <input type="hidden" asp-for="UserId" class="form-control" value="@ViewBag.UserId" readonly />
+    <div>
+        <h3 class="text-accent fw-bold"> Tạo flashcard </h3>
+        <div class="mb-3 form-check p-0">
+            <input asp-for="IsPublic" class="toggle-public" type="checkbox" id="togglePublic" checked />
+            <label for="togglePublic" class="btn-toggle active">
+                <span id="toggleIcon">🌍</span>
+                <span id="toggleText">Công khai</span>
+            </label>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="DeckId" class="control-label"></label>
+    <div class="mb-3">
+        <label asp-for="CardTitle" class="form-label fw-semibold">Nhập tiêu đề </label>
+        <input asp-for="CardTitle" class="form-control" placeholder="Nhập tiêu đề" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CardDescription" class="form-label fw-semibold"> Nhập thêm mô tả</label>
+        <textarea asp-for="CardDescription" class="form-control" rows="3" placeholder="Mô tả thêm..."></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DeckId" class="form-label fw-semibold"> Chọn danh mục</label>
         <select asp-for="DeckId" class="form-control" asp-items="ViewBag.DeckId"></select>
     </div>
-    <div class="form-group">
-        <label>Tiêu đề</label>
-        <input asp-for="CardTitle" class="form-control" />
-    </div>
 
-    <div class="form-group">
-        <label>Mô tả</label>
-        <textarea asp-for="CardDescription" class="form-control"></textarea>
-    </div>
-
-    <div class="form-group form-check">
-        <input asp-for="IsPublic" class="form-check-input" />
-        <label asp-for="IsPublic" class="form-check-label">Công khai</label>
-    </div>
-
-    <hr />
-    <h4>Danh sách thẻ (Front - Back)</h4>
+    <h3 class="text-accent fw-bold">Danh sách thẻ</h3>
 
     <div id="cardPairsContainer">
         @for (int i = 0; i < Model.CardPairs.Count; i++)
         {
-            <div class="card-pair">
-                <label>Front</label>
-                <input asp-for="CardPairs[@i].FrontCard" class="form-control" />
-                <label>Back</label>
-                <input asp-for="CardPairs[@i].BackCard" class="form-control" />
-                <button type="button" class="btn btn-danger removePair mt-1">Xóa</button>
-                <hr />
+            <div class="card-pair row gap-2 m-auto mb-2 p-2 rounded-3" style="background:var(--primary)">
+                <span id="cardPardStt" class=" fw-bold"> @(i+1) </span>
+                <input name="CardPairs[@i].FrontCard" class="form-control col border-0 rounded-3" />
+                <input name="CardPairs[@i].BackCard" class="form-control  col border-0 rounded-3" />
+                <button type="button" class="btn btn-danger removePair col-1 ">Xóa</button>
             </div>
         }
     </div>
 
-    <button type="button" class="btn btn-secondary mt-2" id="addPairBtn">+ Thêm cặp mới</button>
+    <button type="button" class="btn btn-secondary-dark mt-2 mx-auto rounded-pill" style="width:200px" id="addPairBtn">+ Thêm cặp mới</button>
 
-    <div class="form-group mt-3">
-        <input type="submit" value="Tạo Flashcard" class="btn btn-primary" />
+    <div class="form-group mt-3 float-end">
+        <input type="submit" value="Tạo Flashcard" class="btn btn-primary rounded-pill px-4" />
     </div>
 </form>
 
@@ -112,7 +64,13 @@
             pair.querySelectorAll("input").forEach(input => {
                 input.name = input.name.replace(/\[\d+\]/, `[${i}]`);
             });
+            
         });
+        const pairStt = container.querySelectorAll("#cardPardStt");
+
+        pairStt.forEach((pairstt,i)=>{
+            pairstt.innerText = i+1
+        })
     }
 
     function addRemoveEvent(btn) {
@@ -128,20 +86,37 @@
     addBtn.addEventListener("click", function () {
         const index = container.children.length;
         const div = document.createElement("div");
-        div.classList.add("card-pair");
+        div.classList.add("card-pair", "row" ,"gap-2","m-auto","mb-2" ,"p-2" ,"rounded-3");
+        div.style.backgroundColor= "var(--primary)";
         div.innerHTML = `
-            <label>Front</label>
-            <input name="CardPairs[${index}].FrontCard" class="form-control" />
-            <label>Back</label>
-            <input name="CardPairs[${index}].BackCard" class="form-control" />
-            <button type="button" class="btn btn-danger removePair mt-1">Xóa</button>
-            <hr/>
+            <span id="cardPardStt" class="fw-bold"> ${index} </span>
+            <input name="CardPairs[${index}].FrontCard" class="form-control col border-0 rounded-3" />
+            <input name="CardPairs[${index}].BackCard" class="form-control  col border-0 rounded-3" />
+            <button type="button" class="btn btn-danger removePair col-1 ">Xóa</button>
         `;
         container.append(div);
         addRemoveEvent(div.querySelector(".removePair"));
         reindexPairs();
     });
 
+    const checkbox = document.getElementById('togglePublic');
+    const toggleBtn = document.querySelector('.btn-toggle');
+    const toggleIcon = document.getElementById('toggleIcon');
+    const toggleText = document.getElementById('toggleText');
+
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            toggleBtn.classList.remove('inactive');
+            toggleBtn.classList.add('active');
+            toggleIcon.textContent = '🌍';
+            toggleText.textContent = 'Công khai';
+        } else {
+            toggleBtn.classList.remove('active');
+            toggleBtn.classList.add('inactive');
+            toggleIcon.textContent = '🔒';
+            toggleText.textContent = 'Không công khai';
+        }
+    });
 </script>
 @section Scripts {
     @{

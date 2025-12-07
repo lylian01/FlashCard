@@ -1,3 +1,14 @@
+:root {
+    --primary-light: #FAF2E4;
+    --primary: #F1E7D0;
+    --secondary: #C8A47F;
+    --secondary-dark: #8C6A4E;
+    --accent: #6F4E37;
+    --accent-dark: #3F2F25;
+}
+body {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+}
 html {
   font-size: 14px;
 }

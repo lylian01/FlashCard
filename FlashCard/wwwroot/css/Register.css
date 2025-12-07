@@ -1,9 +1,8 @@
 /* Root variables */
-@import url('./Root.css');
+@import url('./site.css');
 body {
     margin: 0;
     font-family: "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #C8A47F22, var(--secondary));
     height: 100vh;
     display: flex;
     justify-content: center;
