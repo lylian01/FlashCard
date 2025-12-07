@@ -82,7 +82,7 @@ namespace FlashCard.Controllers
             ViewBag.UserId = userIdString;
             int userId = int.Parse(userIdString);
 
-            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckId");
+            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckName");
 
             var flashcard = new Flashcard();
             flashcard.CardPairs.Add(new CardPair()); // nếu form có ít nhất 1 pair mặc định
