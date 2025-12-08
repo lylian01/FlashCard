@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --primary-light: #FAF2E4;
     --primary: #F1E7D0;
     --secondary: #C8A47F;
@@ -29,5 +29,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    overflow-x: hidden;
 }
+

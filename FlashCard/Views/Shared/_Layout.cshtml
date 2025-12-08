@@ -11,41 +11,157 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FlashCard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    <div class="m-0 p-0">
+        <div class="row">
+            <!-- Sidebar - 2 columns -->
+            <div class="col-12 col-md-2 sidebar" id="sidebar">
+                <div class="sidebar-header d-flex align-items-center justify-content-between">
+                    <button class="btn-menu-toggle" id="toggleSidebar">
+                        <i class="bi bi-list fs-4"></i>
+                    </button>
+                </div>
+                <!-- Main Navigation -->
+                <nav class="nav-section">
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="../Home/Index" class="nav-link">
+                                <i class="bi bi-house-door-fill"></i>
+                                <span> Home</span>
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li>
+                            <a href="../Decks/UserIndex" class="nav-link">
+                                <i class="bi bi-collection-fill"></i>
+                                <span>Decks</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../Progresses/UserIndex" class="nav-link">
+                                <i class="bi bi-bell-fill"></i>
+                                <span>Progresses</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="divider mx-2"></div>
+
+                <!-- Your Folders -->
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Danh mục</h3>
+                    @{
+                        foreach()
+                                        }
+                    <a href="#" class="folder-item">
+                        <i class="bi bi-folder-fill"></i>
+                        <span>english</span>
+                    </a>
+                    <button class="btn-new-folder">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>New folder</span>
+                    </button>
+                </div>
+
+                <div class="divider mx-3"></div>
+
+                <!-- Start Here -->
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Start here</h3>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-card-list"></i>
+                                <span>Flashcards</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-bookmark-fill"></i>
+                                <span>Expert solutions</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <!-- Main Content - 10 columns -->
+            <div class="col-12 col-md-10 content-wrapper m-0 p-0" id="mainContent">
+                <header>
+                    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                        <div class="container-fluid">
+                            <h4>FlashCard</h4>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+                <main role="main" class=" p-4" >
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted text-center">
         <div class="container">
             &copy; 2025 - FlashCard - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        // Toggle active state on nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.href === window.location.href) {
+                link.classList.add('active');
+            }
+        });
+        // Toggle sidebar collapse
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+
+            // Thay đổi số column của content khi sidebar thu gọn
+            if (sidebar.classList.contains('collapsed')) {
+                // Sidebar thu gọn → Content chiếm nhiều space hơn
+                mainContent.classList.remove('col-md-10');
+                mainContent.classList.add('col-md-11');
+            } else {
+                // Sidebar mở rộng → Content về 10 cols
+                mainContent.classList.remove('col-md-11');
+                mainContent.classList.add('col-md-10');
+            }
+        });
+
+        // Tooltip cho sidebar khi collapsed (optional)
+        document.querySelectorAll('.nav-link, .folder-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                if (sidebar.classList.contains('collapsed')) {
+                    const text = this.querySelector('span')?.textContent;
+                    if (text) {
+                        this.setAttribute('title', text);
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

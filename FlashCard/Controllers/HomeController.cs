@@ -1,5 +1,6 @@
 using FlashCard.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -8,18 +9,32 @@ namespace FlashCard.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly FlashcardDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, FlashcardDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            
-            ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdString == null)
+                return RedirectToAction("Login", "Users");
+            ViewData["UserId"] = userIdString;
             ViewData["UserEmail"] = User.FindFirstValue(ClaimTypes.Email);
             return View();
+        }
+        public IActionResult DecksView()
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int userId = int.Parse(userIdString);
+            var listDeck = _context.Decks
+                     .Include(d => d.Flashcards)
+                     .Where(d => d.UserId == userId)
+                     .ToListAsync();
+            return View(listDeck);
         }
 
         public IActionResult Privacy()

@@ -2,7 +2,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div>
+<div>
+    <h5>
+        @ViewBag.UserId |
+        @ViewBag.UserEmail
+    </h5>
+    
+</div> 
+<div>
+    <h5>Flashcards</h5>
+    <a href="./Flashcards/UserIndex">User Index</a>
+    <a href="./Flashcards/AdminIndex">AdminIndex</a>
+    <a href="./Flashcards/Create">Create Flash card</a>
 </div>
+<div>
+    <h5>user</h5>
+    <a href="./Users/Register">Register</a>
+    <a href="./Users/Login">Login</a>
+    <a href="./Users/UsersIndex">User Index</a>
+</div>
+<div>
+    <h5>deck</h5>
+    <a href="./Decks/UserIndex">UserIndex</a>
+    <a href="./Decks/AdminIndex">AdminIndex</a>
+    <a href="./Decks/Create">Create Deck</a>
+</div>
+</div>
+

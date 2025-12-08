@@ -94,7 +94,9 @@
             <span id="cardPardStt" class="fw-bold"> ${index} </span>
             <input name="CardPairs[${index}].FrontCard" class="form-control col border-0 rounded-3" />
             <input name="CardPairs[${index}].BackCard" class="form-control  col border-0 rounded-3" />
-            <button type="button" class="btn btn-danger removePair col-1 ">Xóa</button>
+            <button type="button" class="btn btn-danger removePair col-1 "> 
+                <i class="bi bi-trash3 "></i> 
+            </button>
         `;
         container.append(div);
         addRemoveEvent(div.querySelector(".removePair"));
