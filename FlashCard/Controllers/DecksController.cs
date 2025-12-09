@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.WebSockets;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 
 namespace FlashCard.Controllers
@@ -111,8 +112,7 @@ namespace FlashCard.Controllers
 
             var deck = await _context.Decks
                 .Include(d => d.Flashcards)
-                .Where(d => d.DeckId == id)
-                .ToListAsync();
+                .FirstOrDefaultAsync(d => d.DeckId == id);
 
             if (deck == null)
             {

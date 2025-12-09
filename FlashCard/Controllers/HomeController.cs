@@ -26,16 +26,7 @@ namespace FlashCard.Controllers
             ViewData["UserEmail"] = User.FindFirstValue(ClaimTypes.Email);
             return View();
         }
-        public IActionResult DecksView()
-        {
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int userId = int.Parse(userIdString);
-            var listDeck = _context.Decks
-                     .Include(d => d.Flashcards)
-                     .Where(d => d.UserId == userId)
-                     .ToListAsync();
-            return View(listDeck);
-        }
+        
 
         public IActionResult Privacy()
         {

@@ -4,18 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FlashCard</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />  
     <link rel="stylesheet" href="~/FlashCard.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @RenderSection("Styles", required: false)
 </head>
 <body>
     <div class="m-0 p-0">
-        <div class="row">
+        <div class="row m-0">
             <!-- Sidebar - 2 columns -->
             <div class="col-12 col-md-2 sidebar" id="sidebar">
-                <div class="sidebar-header d-flex align-items-center justify-content-between">
+                <div class="sidebar-header pl-5">
                     <button class="btn-menu-toggle" id="toggleSidebar">
                         <i class="bi bi-list fs-4"></i>
                     </button>
@@ -24,20 +24,21 @@
                 <nav class="nav-section">
                     <ul class="list-unstyled">
                         <li>
-                            <a href="../Home/Index" class="nav-link">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link-cus">
                                 <i class="bi bi-house-door-fill"></i>
-                                <span> Home</span>
+                                 <span>Home</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../Decks/UserIndex" class="nav-link">
+                            <a asp-controller="Decks" asp-action="UserIndex" class="nav-link-cus">
                                 <i class="bi bi-collection-fill"></i>
                                 <span>Decks</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../Progresses/UserIndex" class="nav-link">
-                                <i class="bi bi-bell-fill"></i>
+                            <a href="../Progresses/UserIndex" class="nav-link-cus">
+                                <i class="bi bi-bookmark-fill"></i>
+                                @* <i class="bi bi-bell-fill"></i> *@
                                 <span>Progresses</span>
                             </a>
                         </li>
@@ -48,39 +49,8 @@
 
                 <!-- Your Folders -->
                 <div class="nav-section">
-                    <h3 class="nav-section-title">Danh mục</h3>
-                    @{
-                        foreach()
-                                        }
-                    <a href="#" class="folder-item">
-                        <i class="bi bi-folder-fill"></i>
-                        <span>english</span>
-                    </a>
-                    <button class="btn-new-folder">
-                        <i class="bi bi-plus-circle"></i>
-                        <span>New folder</span>
-                    </button>
-                </div>
-
-                <div class="divider mx-3"></div>
-
-                <!-- Start Here -->
-                <div class="nav-section">
-                    <h3 class="nav-section-title">Start here</h3>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#" class="nav-link">
-                                <i class="bi bi-card-list"></i>
-                                <span>Flashcards</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link">
-                                <i class="bi bi-bookmark-fill"></i>
-                                <span>Expert solutions</span>
-                            </a>
-                        </li>
-                    </ul>
+                    <h3 class="nav-section-title">Flash Card</h3>
+                    @await Html.PartialAsync("_DeckListPartial") 
                 </div>
             </div>
             <!-- Main Content - 10 columns -->
@@ -126,10 +96,11 @@
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         // Toggle active state on nav links
-        document.querySelectorAll('.nav-link').forEach(link => {
+        document.querySelectorAll('.nav-link-cus').forEach(link => {
             if (link.href === window.location.href) {
                 link.classList.add('active');
             }
+            
         });
         // Toggle sidebar collapse
         const toggleBtn = document.getElementById('toggleSidebar');
@@ -138,7 +109,7 @@
 
         toggleBtn.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');
-
+                    
             // Thay đổi số column của content khi sidebar thu gọn
             if (sidebar.classList.contains('collapsed')) {
                 // Sidebar thu gọn → Content chiếm nhiều space hơn
@@ -152,7 +123,7 @@
         });
 
         // Tooltip cho sidebar khi collapsed (optional)
-        document.querySelectorAll('.nav-link, .folder-item').forEach(item => {
+        document.querySelectorAll('.nav-link-cus').forEach(item => {
             item.addEventListener('mouseenter', function() {
                 if (sidebar.classList.contains('collapsed')) {
                     const text = this.querySelector('span')?.textContent;
