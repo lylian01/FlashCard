@@ -5,10 +5,8 @@
 @inject FlashcardDbContext _context
 
 @{
-    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
     var flashcards = _context.Flashcards
-        .Where(d => d.UserId == Int32.Parse(userId))
         .OrderByDescending(d => d.CardId)
         .Take(4)
         .ToList();

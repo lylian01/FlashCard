@@ -66,6 +66,7 @@ namespace FlashCard.Controllers
             var flashcard = await _context.Flashcards
                 .Include(f => f.Deck)
                 .Include(f => f.User)
+                .Include(f => f.CardPairs)
                 .FirstOrDefaultAsync(m => m.CardId == id);
             if (flashcard == null)
             {
@@ -80,9 +81,7 @@ namespace FlashCard.Controllers
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ViewBag.UserId = userIdString;
-            int userId = int.Parse(userIdString);
-
-            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckName");
+            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == int.Parse(userIdString)), "DeckId", "DeckName");
 
             var flashcard = new Flashcard();
             flashcard.CardPairs.Add(new CardPair()); // nếu form có ít nhất 1 pair mặc định

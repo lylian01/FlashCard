@@ -1,42 +1,250 @@
-﻿@* @model FlashCard.Models.Flashcard
+﻿@using System.Security.Claims
+@model FlashCard.Models.Flashcard
 
 @{
     ViewData["Title"] = "Details";
 }
+<style>
 
-<h1>Details</h1>
+    .container-card {
+        position: relative;
+        width:100%;
+        height: 350px;
+        margin: 0 auto;
+        transform-style: preserve-3d;
+    }  
+    .card-face {
+        position: absolute;
+        font-weight: 600;
+        font-size:45px;
+        line-height: 1.4;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 40px;
+        cursor: pointer;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(212, 175, 55, 0.1), inset 0 0 100px rgba(255, 255, 255, 0.1);
+    } 
 
-<div>
-    <h4>Flashcard</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FrontFlash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FrontFlash)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BackFlash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BackFlash)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Deck)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Deck.DeckId)
-        </dd>
-    </dl>
+        .card-face::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 25px;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .card-face:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.3), inset 0 0 100px rgba(255, 255, 255, 0.2);
+        }
+
+    
+    #cardFront {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        border: 2px solid var(--secondary);
+        color: var(--accent-dark);
+    }
+
+    #cardBack {
+        background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+        color: white;
+    }
+
+    .modal-content {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
+        border: 2px solid var(--secondary);
+        color: var(--accent-dark);
+    }
+
+    .showList {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+</style>
+
+<div class="mx-auto" style="width:60%;">
+    <h1>
+        @Html.DisplayFor(m => m.CardTitle)
+    </h1>
+    <div class="d-flex justify-content-between ">
+        <div>
+            @if (Model.DeckId != null)
+            {
+                <i class= "bi bi-folder" ></i>
+            }
+            <span>@Html.DisplayFor(model => model.Deck.DeckName)</span>
+        </div>
+        <div class="d-flex gap-3">
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model?.CardId" style="color: var(--accent-dark); text-decoration:none;">
+                    <i class="bi bi-pencil-square"></i>
+                    Chỉnh sửa
+                </a>
+            </div>
+            <div data-bs-toggle="modal" data-bs-target="#infoShow" style="cursor:pointer;">
+                <i class="bi bi-info-circle"></i>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="infoShow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông tin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.DisplayFor(m => m.CardDescription)
+                </div>
+            </div>  
+        </div>
+    </div>
+
+    <div class="w-100">
+        <div class="mb-5 mt-3">
+            <div class="container-card " id="flipCardElement">
+                <div class="card-face" id="cardFront">
+                    front
+                </div>
+                <div class="card-face" id="cardBack" style="display:none;">
+                    black
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-between" style="margin: 0 auto;">
+            <div class="col-md-2 col-12 d-flex flex-column">
+                <span>Tạo bởi </span>
+                <span class="fw-bold">@Model.User.Username</span>
+            </div>
+            <div class="col-md-8 col-12 d-flex justify-content-center">
+                <button id="prevBtn" class="border-0 fs-3 px-5 py-1 rounded-pill" style="background:var(--secondary)"><i class="bi bi-arrow-left"></i></button>
+                <div class="fs-3 d-inline mx-2"><span id="currentCard"> 1 </span> / <span id="lengthCard">10</span></div>
+                <button id="nextBtn" class="border-0 fs-3 px-5 py-1 rounded-pill" style="background:var(--secondary)"><i class="bi bi-arrow-right"></i></button>
+            </div>
+            <div class="col-md-2 col-12 d-flex justify-content-center align-content-center gap-3">
+                <span id="restartBtn" class="border-0 fs-3" style="cursor: pointer;"><i class="bi bi-arrow-counterclockwise"></i></span>
+                <span id="shuffleBtn" class="border-0 fs-3" style="cursor: pointer;"><i class="bi bi-shuffle"></i></span>
+            </div>
+        </div>
+    </div>
+    <hr style="color:var(--secondary);" />
+    <div>
+        <h5>Danh sách thẻ </h5>
+        <div class=" border rounded-3 p-1" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);">
+            @for (int i = 0; i < Model.CardPairs.Count; i++)
+            {
+                <div class="m-2 p-2 mb-2 rounded-3 row" style="border:1px solid var(--secondary-dark); background:var(--primary)">
+                    <span class="px-2 py-3 col-4 ">@Model.CardPairs[i].FrontCard</span>
+                    <span class="px-2 py-3 col-1" style="color: var(--secondary);">|</span>
+                    <span class="px-2 py-3 col-7">@Model.CardPairs[i].BackCard</span>
+                </div>
+            }
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CardId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div> *@
+
+
+<script>
+    const cardPairs = [
+        @for (int i = 0; i < Model.CardPairs.Count; i++)
+        {
+                <text>
+                {
+                    front: "@Html.Raw(Model.CardPairs[i].FrontCard)",
+                    back: "@Html.Raw(Model.CardPairs[i].BackCard)"
+                }@(i < Model.CardPairs.Count - 1 ? "," : "")
+                </text>
+        }
+    ];
+
+    const flipCardElement = document.getElementById('flipCardElement');
+    const frontCard = document.getElementById('cardFront');
+    const backCard = document.getElementById('cardBack');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    const currentCard = document.getElementById('currentCard');
+    const lengthCard = document.getElementById('lengthCard');
+
+
+    let currentIndex = 0;
+
+    function loadCard(index){
+        const card = cardPairs[index];
+        frontCard.textContent = card.front;
+        backCard.textContent = card.back;
+        currentCard.textContent = index + 1;
+    }
+    // Previous card
+    function previousCard() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            loadCard(currentIndex);
+            updateButtons();
+        }
+    }
+    // Next card
+    function nextCard() {
+        if (currentIndex < cardPairs.length - 1) {
+            currentIndex++;
+            loadCard(currentIndex);
+            updateButtons();
+        }
+    }
+    function shuffleCards() {
+        for (let i = cardPairs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cardPairs[i], cardPairs[j]] = [cardPairs[j], cardPairs[i]];
+        }
+        currentIndex = 0;
+        loadCard(currentIndex);
+        updateButtons();
+        }
+    function restartCards() {
+        currentIndex = 0;
+        loadCard(currentIndex);
+        updateButtons();
+    }
+    prevBtn.addEventListener('click', previousCard);
+    nextBtn.addEventListener('click', nextCard);
+    restartBtn.addEventListener('click', restartCards);
+    shuffleBtn.addEventListener('click', shuffleCards);
+
+    function updateButtons() {
+        prevBtn.style.color = (currentIndex === 0) ?  'lightgray' : 'white';
+        nextBtn.style.color = (currentIndex === cardPairs.length - 1) ? 'lightgray' : 'white';
+    }
+    frontCard.addEventListener('click', () => {
+        frontCard.style.display = 'none';
+        backCard.style.display = 'flex';
+    });
+    backCard.addEventListener('click', () => {
+        backCard.style.display = 'none';
+        frontCard.style.display = 'flex';
+    });
+
+    function init() {
+        lengthCard.textContent =  cardPairs.length;
+        loadCard(currentIndex);
+        updateButtons();
+
+    }
+    init();
+</script>
+
+
+
+
+
+
+

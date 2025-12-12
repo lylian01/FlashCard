@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace FlashCard.Controllers
 {
-    [Authorize]
+    
     public class DecksController : Controller
     {
         private readonly FlashcardDbContext _context;
@@ -27,6 +27,7 @@ namespace FlashCard.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: Decks
         public async Task<IActionResult> AdminIndex()
         {
@@ -40,6 +41,7 @@ namespace FlashCard.Controllers
             var flashcardDbContext = _context.Decks.Include(f => f.User);
             return View(await flashcardDbContext.ToListAsync());
         }
+        [Authorize]
         public async Task<IActionResult> UserIndex()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -55,7 +57,7 @@ namespace FlashCard.Controllers
 
             return View(decksByUser);
         }
-
+        [Authorize]
         // GET: Decks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -74,7 +76,7 @@ namespace FlashCard.Controllers
 
             return View(deck);
         }
-
+        [Authorize]
         // GET: Decks/Create
         public IActionResult Create()
         {
@@ -101,7 +103,7 @@ namespace FlashCard.Controllers
             //ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", deck.UserId);
             return View(deck);
         }
-
+        [Authorize]
         // GET: Decks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

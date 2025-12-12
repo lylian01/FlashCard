@@ -19,10 +19,7 @@ namespace FlashCard.Controllers
 
         public IActionResult Index()
         {
-            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userIdString == null)
-                return RedirectToAction("Login", "Users");
-            ViewData["UserId"] = userIdString;
+            ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ViewData["UserEmail"] = User.FindFirstValue(ClaimTypes.Email);
             return View();
         }

@@ -112,7 +112,16 @@ namespace FlashCard.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            // Xóa cookie xác thực
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
+            // Chuyển hướng về trang Login hoặc Home
+            return RedirectToAction(nameof(Login));
+        }
 
 
         // GET: Users/Edit/5
