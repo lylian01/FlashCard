@@ -3,9 +3,52 @@
 @{
     ViewData["Title"] = "Create";
 }
-@section Styles {
-    <link rel="stylesheet" href="~/css/FCCreate.css" />
-}
+<style>
+    /* màu chữ */
+    .text-accent {
+        color: var(--accent);
+    }
+
+    .text-accent-dark {
+        color: var(--accent-dark);
+    }
+
+    /* btn isPublic*/
+    .toggle-public {
+        display: none;
+    }
+
+    .btn-toggle {
+        gap: 3px;
+        padding: 5px 10px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-toggle.active {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-toggle.inactive {
+            background: var(--secondary-dark);
+            color: white;
+        }
+
+    /* button custom */
+    .btn-secondary-dark {
+        background-color: var(--secondary-dark);
+        color: white;
+        border: none;
+    }
+
+        .btn-secondary-dark:hover {
+            background-color: var(--secondary);
+        }
+
+</style>
 
 <form asp-action="Create" method="post" class="card shadow-sm border-0 p-4">
     <input type="hidden" asp-for="UserId" class="form-control" value="@ViewBag.UserId" readonly />
@@ -30,7 +73,9 @@
 
     <div class="mb-3">
         <label asp-for="DeckId" class="form-label fw-semibold"> Chọn danh mục</label>
-        <select asp-for="DeckId" class="form-control" asp-items="ViewBag.DeckId"></select>
+        <select asp-for="DeckId" class="form-control" asp-items="ViewBag.DeckId">
+            <option value="">-- Chọn Deck --</option>
+        </select>
     </div>
 
     <h3 class="text-accent fw-bold">Danh sách thẻ</h3>

@@ -153,7 +153,7 @@ namespace FlashCard.Controllers
                     foreach (var pair in flashcard.CardPairs)
                     {
                         pair.FlashcardId = flashcard.CardId;
-                        _context.CardPairs.Add(pair);
+                        _context.Add(pair);
                     }
 
                     _context.Update(flashcard);
