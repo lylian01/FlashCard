@@ -1,12 +1,12 @@
-﻿
+﻿@using System.Security.Claims
+@inject FlashcardDbContext _context
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@inject FlashcardDbContext _context
-
 @{
-
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var flashcards = _context.Flashcards
+        .Where(u => u.UserId == Int32.Parse(userId))
         .OrderByDescending(d => d.CardId)
         .Take(4)
         .ToList();

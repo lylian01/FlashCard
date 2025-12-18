@@ -1,53 +1,152 @@
-﻿@* @model IEnumerable<FlashCard.Models.Flashcard>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<Flashcard>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AdminIndex ";
 }
+<style>
+    .tableCus {
+        border: 2px solid var(--secondary-dark);
+        margin-bottom: 10px;
+    }
+        .cardCus:hover {
+            transform: translateY(-6px);
+           box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.3), inset 0 0 100px rgba(255, 255, 255, 0.2);
+        }
+    a{
+        text-decoration:none;
+        color:black;
+    }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .page-link {
+        background: var(--secondary);
+        color:white;
+        border: 1px solid var(--accent);
+    }
+
+    li.page-item {
+        color: white ;
+    }
+
+    .page-item.active .page-link {
+        background: var(--secondary);
+        color: var(--accent-dark);
+        border: 1px solid var(--accent);
+        font-weight: bold;
+    }
+        li.page-item a:hover {
+            border: 1px solid var(--accent);
+            background: var(--primary);
+            color: var(--accent-dark);
+            font-weight:bold;
+        }
+
+    .modalCus{
+        cursor: pointer;
+    }
+    .modalCus:hover{
+            color: #0a58ca;
+    }
+</style>
+<h3 class="mb-4" style="color:var(--accent-dark)">List Flash Card</h3>
+
+<table class="table table-striped table-hover table-light tableCus">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FrontFlash)
+            <th scope="col">
+                <span>Title</span>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BackFlash)
+            <th scope="col">
+                <span>Public</span>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
+            <th scope="col">
+                <span>CardPairs</span>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deck)
+            <th scope="col">
+                <span>User</span>
             </th>
-            <th></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FrontFlash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BackFlash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deck.DeckId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CardId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CardId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CardId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr >
+                <td>
+                    @item.CardTitle
+                </td>
+                <td>
+                     @if (item.IsPublic == true)
+                {
+                    <span>🌍</span>
+                }
+                else
+                {
+                    <span>🔒</span>
+
+                } 
+                </td>
+                <td>
+
+                    @item.CardPairs.Count() temps
+                </td>
+                <td>
+                    @item.User.Email
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CardId"> <i class="bi bi-pencil-square"></i> </a> |
+                    <a asp-action="Details" asp-route-id="@item.CardId">Details</a> |
+                    <span class="modalCus" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteId('@item.CardId','@item.CardTitle','@item.User.Username')">
+                        Delete
+                    </span>
+                </td>
+            </tr>
+        }
     </tbody>
-</table> *@
+</table>
+@Html.PagedListPager(
+Model,
+page => Url.Action("AdminIndex", new { page }),
+    new PagedListRenderOptions
+    {
+        UlElementClasses = new[] { "pagination", "justify-content-center" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    }
+)
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h1 class="fs-5">Are you sure you want to delete  </h1>
+                <span id="titleCard" class="fs-4"></span>
+                <h4>by <span id="userName"></span></h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="id" id="deleteId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setDeleteId(id,title,name){
+        document.getElementById("deleteId").value = id;
+        document.getElementById("titleCard").innerText = title;
+        document.getElementById("userName").innerText = name;
+    }
+</script>

@@ -1,89 +1,78 @@
-﻿@model IEnumerable<FlashCard.Models.Flashcard>
+﻿@model IEnumerable<FlashCard.Models.Flashcard> 
 
 @{
     ViewData["Title"] = "UserIndex";
 }
+<style>
+    .cardCus{
+        border: 2px solid var(--secondary-dark);
+        margin-bottom: 10px;
+    }
 
-<h1>UserIndex</h1>
+    .cardCus:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.3), inset 0 0 100px rgba(255, 255, 255, 0.2);
+    }
+</style>
+<h3 class="mb-4" style="color:var(--accent-dark)">List Flash Card</h3>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<div class="card border border-1">   </div>
+<div class="row ">
 @foreach (var item in Model)
 {
-    <div class="d-flex flex-row">
-        <div style="width: 80%">  
-            <div class="aItem card border border-1  m-2">
-                <a asp-action="Edit" asp-route-id="@item.CardId" class="d-flex flex-row">
-                    <div>@Html.DisplayFor(modelItem => item.CardId)</div>
-                    <div>@Html.DisplayFor(modelItem => item.CardTitle)</div>
-                    <div>@Html.DisplayFor(modelItem => item.IsPublic)</div>
-                    <div>@Html.DisplayFor(modelItem => item.Deck)</div>
-                    <div>@Html.DisplayFor(modelItem => item.CardPairs.Count)</div>
-                </a>
+    <div class="card cardCus col-5 mx-auto pe-3 rounded-3 ps-1">
+        <div class="card-body row align-items-center">
+            <div class="col-10">
+                <div class="d-flex flex-col ">
+                    <a asp-action="Edit" asp-route-id="@item.CardId" class="text-decoration-none text-black">
+                    <div class="fs-6">
+                            @if (item.IsPublic == true)
+                            {
+                                <span>🌍</span>
+                            }
+                            else
+                            {
+                                <span>🔒</span>
+
+                            }
+                            @Html.DisplayFor(modelItem => item.CardPairs.Count) terms 
+                            |@Html.DisplayFor(modelItem => item.Deck.DeckName)
+                    </div>
+                    <div class="fs-4">
+                        @Html.DisplayFor(modelItem => item.CardTitle)
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteId('@item.CardId','@item.CardTitle')">
+                    Delete
+                </button>
+            </div>
+        </div> 
+    </div>
+}
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h1 class="fs-5">Are you sure you want to delete  </h1>
+                <span id="titleCard" class="fs-4"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form  asp-action="Delete" method="post">
+                     <input type="hidden" name="id" id="deleteId" /> 
+                    <input type="submit" value="Delete" class="btn btn-danger" /> 
+                </form>
             </div>
         </div>
-        <div style="width:20%">
-            <form asp-action="Delete" asp-route-id="@item.CardId" method="post">
-                <input type="hidden" asp-for="@item.CardId" />
-                <input type="submit" value="Delete" class="btn btn-danger" />
-            </form>
-        
-        </div>
-    </div> 
-}
+    </div>
+</div>
 
-
-
-
-@* <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CardId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CardTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CardDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPublic)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deck)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-            <tr class="card">
-                <a asp-action="Edit" asp-route-id="@item.CardId">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CardId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CardTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CardDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsPublic)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Deck.DeckName)
-                    </td>
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@item.CardId">Delete</a>
-                    </td>
-                </a>
-            </tr>
-}
-    </tbody>
-</table> 
-*@
+<script>
+    function setDeleteId(id,title){
+        document.getElementById("deleteId").value = id;
+        document.getElementById("titleCard").innerText = title;
+    }
+</script>

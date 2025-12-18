@@ -11,6 +11,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace FlashCard.Controllers
 {
@@ -25,17 +27,25 @@ namespace FlashCard.Controllers
         }
 
         // GET: Flashcards
-        public async Task<IActionResult> AdminIndex()
+        public async Task<IActionResult> AdminIndex(int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail != "admin@gmail.com")
             {
                 ModelState.AddModelError("", "Sai thông tin đăng nhập vào admin.");
                 return RedirectToAction("Login", "Users");
             }
-
-            var flashcardDbContext = _context.Flashcards.Include(f => f.Deck).Include(f => f.CardPairs).Include(f => f.User);
-            return View(await flashcardDbContext.ToListAsync());
+           
+            var flashcardAll = _context.Flashcards
+                .Include(f => f.Deck)
+                .Include(f => f.CardPairs)
+                .Include(f => f.User)
+                .OrderBy(x=>x.CardId)
+                .ToPagedList(pageNumber,pageSize);
+           
+            return View(flashcardAll);
         }
         public async Task<IActionResult> UserIndex()
         {
@@ -48,6 +58,7 @@ namespace FlashCard.Controllers
             var flashcardsByUser = await _context.Flashcards
                 .Include(f => f.Deck)
                 .Include(f => f.CardPairs)
+                .Include(f => f.User)
                 .Where(f => f.UserId == userId)
                 .ToListAsync();
 
@@ -211,6 +222,11 @@ namespace FlashCard.Controllers
             }
 
             await _context.SaveChangesAsync();
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (userEmail == "admin@gmail.com")
+            {
+                return RedirectToAction(nameof(AdminIndex));
+            }
             return RedirectToAction(nameof(UserIndex));
         }
 

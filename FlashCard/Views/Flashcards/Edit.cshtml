@@ -40,38 +40,37 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <div class="form-group form-check p-0 m-0 mb-2">
-            <h3 class="fw-bold" style="color: var(--accent);">Chỉnh sửa flashcard </h3>
+            <h3 class="fw-bold" style="color: var(--accent);">Edit flashcard </h3>
             <input asp-for="IsPublic" class="toggle-public" type="checkbox" id="togglePublic" checked />
             <label for="togglePublic" class="btn-toggle active pe-4">
                 <span id="toggleIcon">🌍</span>
-                <span id="toggleText">Công khai</span>
+                <span id="toggleText">Public</span>
             </label>
         </div>
         <div >
-            <input type="submit" value="Lưu" class="btn btn-primary rounded-pill px-5 py-1" />
+            <input type="submit" value="Save" class="btn btn-primary rounded-pill px-5 py-1" />
         </div>
     </div>
     <div class="form-group mb-3">
-        <label class="me-2" asp-for="CardTitle">Tiêu đề </label>
+        <label class="me-2" asp-for="CardTitle">Title </label>
         <input asp-for="CardTitle" class="form-control" />
     </div>
         <div class="form-group mb-3">
-        <label class=" mb-1" asp-for="DeckId">Danh mục</label>
+        <label class=" mb-1" asp-for="DeckId">Deck</label>
         <select asp-for="DeckId" asp-items="ViewBag.DeckId" class="form-control">
-                <option value="">-- Chọn danh mục --</option>
+                <option value="">-- Deck --</option>
         </select>
         </div>
     <div class="form-group mb-3">
-        <label class="mb-1" asp-for="CardDescription">Mô tả</label>
+        <label class="mb-1" asp-for="CardDescription">Description</label>
         <textarea asp-for="CardDescription" class="form-control"></textarea>
     </div>
-    <h4 class="fw-bold" style="color: var(--accent);">Danh sách thẻ </h4>
+    <h4 class="fw-bold" style="color: var(--accent);">List of cards </h4>
     <div id="cardPairsContainer" class="p-3 rounded-3" style="background:var(--primary)">
         @for (int i = 0; i < Model.CardPairs.Count; i++)
         {
             <div>
                 <div class="card-pair row gap-2 m-auto mb-1 p-2 rounded-3 form-group">
-                    @* <input type="hidden" asp-for="CardPairs[@i].PairId" /> *@
                     <input asp-for="CardPairs[@i].FrontCard" class="form-control col border-0 rounded-3" />
                     <input asp-for="CardPairs[@i].BackCard" class="form-control  col border-0 rounded-3" />
                     <button type="button" class="btn btn-danger removePair col-1 ">
@@ -79,35 +78,13 @@
                     </button>
                 </div>
             </div>
-
-
-
-
-
-            @* <div class="card-pair mb-2 p-2 border border-2">
-                <div class="form-group">
-                    <label>Front</label>
-                    <input asp-for="CardPairs[@i].FrontCard" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>Back</label>
-                    <input asp-for="CardPairs[@i].BackCard" class="form-control" />
-                </div>
-                <button type="button" class="btn btn-danger removePair mt-1">Xóa</button>
-            </div> *@
         }
     </div>
 
+    <button type="button" class="btn btn-secondary-dark mt-2 mx-auto rounded-pill" style="width:200px" id="addPairBtn">+ Add more card pairs</button>
 
-
-    <button type="button" class="btn btn-secondary-dark mt-2 mx-auto rounded-pill" style="width:200px" id="addPairBtn">+ Thêm cặp mới</button>
-    @* <button type="button" id="addPairBtn" class="btn btn-secondary mt-2"></button> *@
-
-    @* <div class="form-group mt-3">
-        <input type="submit" value="Lưu thay đổi" class="btn btn-primary" />
-    </div> *@
     <div class="form-group mt-2 d-flex justify-content-end">
-        <input type="submit" value="Lưu thay đổi" class="btn btn-primary rounded-pill px-5 py-3" />
+        <input type="submit" value="Save" class="btn btn-primary rounded-pill px-5 py-3" />
     </div>
 </form>
 <script>
@@ -136,9 +113,6 @@
     addBtn.addEventListener("click", function () {
         const index = container.children.length;
         const div = document.createElement("div");
-        // div.classList.add("card-pair","p-3","rounded-3");
-        // div.style = "background:var(--primary)";
-            // <input type="hidden" name="CardPairs[${index}].PairId" />
         div.innerHTML = `
             <div class="card-pair row gap-2 m-auto mb-1 p-2 rounded-3" >
                 <input name="CardPairs[${index}].FrontCard" class="form-control col border-0 rounded-3" />
@@ -163,26 +137,26 @@
         toggleButton.classList.remove('inactive');
         toggleButton.classList.add('active');
         toggleIcon.textContent = '🌍';
-        toggleText.textContent = 'Công khai';
+        toggleText.textContent = 'Public';
     }
     else{
         console.log('not checked');
         toggleButton.classList.remove('active');
         toggleButton.classList.add('inactive');
         toggleIcon.textContent = '🔒';
-        toggleText.textContent = 'Không công khai';
+        toggleText.textContent = 'UnPublic';
     }
     checkbox.addEventListener('change', function() {
         if (this.checked) {
             toggleButton.classList.remove('inactive');
             toggleButton.classList.add('active');
             toggleIcon.textContent = '🌍';
-            toggleText.textContent = 'Công khai';
+            toggleText.textContent = 'Public';
         } else {
             toggleButton.classList.remove('active');
             toggleButton.classList.add('inactive');
             toggleIcon.textContent = '🔒';
-            toggleText.textContent = 'Không công khai';
+            toggleText.textContent = 'UnPublic';
         }
     });
 </script>

@@ -53,32 +53,32 @@
 <form asp-action="Create" method="post" class="card shadow-sm border-0 p-4">
     <input type="hidden" asp-for="UserId" class="form-control" value="@ViewBag.UserId" readonly />
     <div>
-        <h3 class="text-accent fw-bold"> Tạo flashcard </h3>
+        <h3 class="text-accent fw-bold"> Create flashcard </h3>
         <div class="mb-3 form-check p-0">
             <input asp-for="IsPublic" class="toggle-public" type="checkbox" id="togglePublic" checked />
             <label for="togglePublic" class="btn-toggle active">
                 <span id="toggleIcon">🌍</span>
-                <span id="toggleText">Công khai</span>
+                <span id="toggleText">Public</span>
             </label>
         </div>
     </div>
     <div class="mb-3">
-        <label asp-for="CardTitle" class="form-label fw-semibold">Nhập tiêu đề </label>
-        <input asp-for="CardTitle" class="form-control" placeholder="Nhập tiêu đề" />
+        <label asp-for="CardTitle" class="form-label fw-semibold">Title </label>
+        <input asp-for="CardTitle" class="form-control" placeholder="Title" />
     </div>
     <div class="mb-3">
-        <label asp-for="CardDescription" class="form-label fw-semibold"> Nhập thêm mô tả</label>
-        <textarea asp-for="CardDescription" class="form-control" rows="3" placeholder="Mô tả thêm..."></textarea>
+        <label asp-for="CardDescription" class="form-label fw-semibold"> Description</label>
+        <textarea asp-for="CardDescription" class="form-control" rows="3" placeholder="Description..."></textarea>
     </div>
 
     <div class="mb-3">
-        <label asp-for="DeckId" class="form-label fw-semibold"> Chọn danh mục</label>
+        <label asp-for="DeckId" class="form-label fw-semibold"> Deck</label>
         <select asp-for="DeckId" class="form-control" asp-items="ViewBag.DeckId">
-            <option value="">-- Chọn Deck --</option>
+            <option value="">-- Deck --</option>
         </select>
     </div>
 
-    <h3 class="text-accent fw-bold">Danh sách thẻ</h3>
+    <h3 class="text-accent fw-bold">List of cards</h3>
 
     <div id="cardPairsContainer">
         @for (int i = 0; i < Model.CardPairs.Count; i++)
@@ -94,10 +94,10 @@
         }
     </div>
 
-    <button type="button" class="btn btn-secondary-dark mt-2 mx-auto rounded-pill" style="width:200px" id="addPairBtn">Thêm cặp thẻ</button>
+    <button type="button" class="btn btn-secondary-dark mt-2 mx-auto rounded-pill" style="width:200px" id="addPairBtn">+ Add more card pairs</button>
 
     <div class=" mt-2 d-flex justify-content-end">
-        <input type="submit" value="Tạo Flashcard" class="btn btn-primary rounded-pill px-5 py-3" />
+        <input type="submit" value="Create Flashcard" class="btn btn-primary rounded-pill px-5 py-3" />
     </div>
 </form>
 
@@ -158,12 +158,12 @@
             toggleBtn.classList.remove('inactive');
             toggleBtn.classList.add('active');
             toggleIcon.textContent = '🌍';
-            toggleText.textContent = 'Công khai';
+            toggleText.textContent = 'Public';
         } else {
             toggleBtn.classList.remove('active');
             toggleBtn.classList.add('inactive');
             toggleIcon.textContent = '🔒';
-            toggleText.textContent = 'Không công khai';
+            toggleText.textContent = 'UnPublic';
         }
     });
 </script>

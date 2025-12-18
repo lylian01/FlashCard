@@ -38,7 +38,6 @@
                         <li>
                             <a href="../Progresses/UserIndex" class="nav-link-cus">
                                 <i class="bi bi-bookmark-fill"></i>
-                                @* <i class="bi bi-bell-fill"></i> *@
                                 <span>Progresses</span>
                             </a>
                         </li>
@@ -49,7 +48,7 @@
 
                 <!-- Your Folders -->
                 <div class="nav-section">
-                    <h3 class="nav-section-title">Flash Card</h3>
+                    <h3 class="nav-section-title">My Flash Card</h3>
                     @await Html.PartialAsync("_DeckListPartial") 
                 </div>
             </div>
@@ -73,16 +72,20 @@
                                     </li>
                                     
                                 </ul>
-                                <form asp-controller="Users" asp-action="Logout" method="post">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-link">Đăng xuất</button>
-                                </form>
+                                <div>
+                                    <a asp-action="Create">Create New</a>
+                                    <form asp-controller="Users" asp-action="Logout" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-link">LogOut</button>
+                                    </form>
+                                </div>
+                                
 
                             </div>
                         </div>
                     </nav>
                 </header>
-                <main role="main" class=" p-4" >
+                <main role="main" class="p-3" >
                     @RenderBody()
                 </main>
             </div>

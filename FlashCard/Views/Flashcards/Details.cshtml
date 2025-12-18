@@ -87,7 +87,7 @@
             <div>
                 <a asp-action="Edit" asp-route-id="@Model?.CardId" style="color: var(--accent-dark); text-decoration:none;">
                     <i class="bi bi-pencil-square"></i>
-                    Chỉnh sửa
+                    Edit
                 </a>
             </div>
             <div data-bs-toggle="modal" data-bs-target="#infoShow" style="cursor:pointer;">
@@ -99,7 +99,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Nội dung mô tả</h5>
+                    <h5 class="modal-title">Description</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -122,7 +122,7 @@
         </div>
         <div class="row justify-content-between" style="margin: 0 auto;">
             <div class="col-md-2 col-12 d-flex flex-column">
-                <span>Tạo bởi </span>
+                <span>By </span>
                 <span class="fw-bold">@Model.User.Username</span>
             </div>
             <div class="col-md-8 col-12 d-flex justify-content-center">
@@ -138,7 +138,7 @@
     </div>
     <hr style="color:var(--secondary);" />
     <div>
-        <h5>Danh sách thẻ </h5>
+        <h5>List of cards </h5>
         <div class=" border rounded-3 p-1" style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);">
             @for (int i = 0; i < Model.CardPairs.Count; i++)
             {
@@ -154,17 +154,18 @@
 
 
 <script>
-    const cardPairs = [
-        @for (int i = 0; i < Model.CardPairs.Count; i++)
-        {
-                <text>
-                {
-                    front: "@Html.Raw(Model.CardPairs[i].FrontCard)",
-                    back: "@Html.Raw(Model.CardPairs[i].BackCard)"
-                }@(i < Model.CardPairs.Count - 1 ? "," : "")
-                </text>
-        }
-    ];
+    const cardPairs = 
+[
+            @for (int i = 0; i < Model.CardPairs.Count; i++)
+            {
+                    <text>
+                    {
+                        front: "@Html.Raw(Model.CardPairs[i].FrontCard)",
+                        back: "@Html.Raw(Model.CardPairs[i].BackCard)"
+                    }@(i < Model.CardPairs.Count - 1 ? "," : "")
+                    </text>
+            }
+        ];
 
     const flipCardElement = document.getElementById('flipCardElement');
     const frontCard = document.getElementById('cardFront');
@@ -237,7 +238,6 @@
         lengthCard.textContent =  cardPairs.length;
         loadCard(currentIndex);
         updateButtons();
-
     }
     init();
 </script>

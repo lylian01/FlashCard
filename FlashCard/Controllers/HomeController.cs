@@ -16,6 +16,10 @@ namespace FlashCard.Controllers
             _logger = logger;
             _context = context;
         }
+        public IActionResult New()
+        {
+                return View();
+        }
 
         public IActionResult Index()
         {
