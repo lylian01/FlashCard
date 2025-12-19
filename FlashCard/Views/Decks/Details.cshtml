@@ -2,35 +2,122 @@
 
 @{
     ViewData["Title"] = "Details";
+    var count = 0;
+    var idCard = 0;
 }
+<style>
+    .tableCus {
+        border: 2px solid var(--secondary-dark);
+        margin-bottom: 10px;
+    }
 
-<h1>Details</h1>
+    .cardCus:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(212, 175, 55, 0.3), inset 0 0 100px rgba(255, 255, 255, 0.2);
+    }
+    .modalCus {
+        cursor: pointer;
+    }
+        .modalCus:hover {
+            color: #0a58ca;
+        }
+</style>
 
 <div>
-    <h4>Deck</h4>
+     <div class="d-flex align-content-center justify-content-between"> 
+        <div class="d-flex align-items-end ">
+            <h3 style="color:var(--accent-dark)">
+                @Html.DisplayFor(model => model.DeckName)
+            </h3>
+            <div class="ps-2 fw-bold">by  @Html.DisplayFor(model => model.User.Username)</div>
+        </div>
+        <div>
+            <button class="btn " style="background:var(--accent);border:1px solid var(--secondary);">
+            <a asp-action="Edit" asp-route-id="@Model?.DeckId" style="color: var(--primary); text-decoration:none;">
+                    <i class="bi bi-pencil-square"></i>
+                    Edit
+                </a>
+            </button>   
+        </div>
+    </div>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeckName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeckName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-    </dl>
+    <div class="mb-3">
+        <h5>Description</h5>
+        @if (Model.Description == null)
+        {
+            <div class="alert alert-warning" role="alert">
+                This deck has no description.
+            </div>
+        }
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    
+    <div>
+        <h5>List FlashCard</h5>
+        @if (Model.Flashcards.Count == 0)
+        {
+            <div class="alert alert-warning" role="alert">
+                This deck has no flashcards.
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped table-hover table-light tableCus" >
+                <thead>
+                   <tr>
+                       <th scope="col">#</th>
+                       <th scope="col">Title</th>
+                       <th scope="col">FlashCard</th>
+                       <th scope="col"></th>
+                   </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Flashcards)
+                {
+                        <tr>
+                            <td>@(count += 1)</td>
+                            <td>@item.CardTitle</td>
+                            <td>@item.CardPairs.Count() temps</td>
+                            <td>
+                                <a asp-controller="Flashcards" asp-action="Edit" asp-route-id="@item.CardId" class="text-body text-decoration-none">Edit</a> |
+                                <a asp-controller="Flashcards" asp-action="Details" asp-route-id="@item.CardId" class="text-body text-decoration-none">Details</a> |
+                                <span class="modalCus" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteId('@item.CardId','@item.CardTitle','@item.User.Username')">
+                                    Delete
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.DeckId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-title p-4">
+                <h1 class="fs-5">Are you sure you want to delete  </h1>
+                <span id="titleCard" class="fs-4"></span>
+                <h4>by <span id="userName"></span></h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="@idCard" id="deleteId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    function setDeleteId(id,title,name){
+        document.getElementById("deleteId").value = id;
+        idCard = id;
+        document.getElementById("titleCard").innerText = title;
+        document.getElementById("userName").innerText = name;
+    }
+</script>

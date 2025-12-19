@@ -44,7 +44,6 @@ namespace FlashCard.Controllers
                 .Include(f => f.User)
                 .OrderBy(x=>x.CardId)
                 .ToPagedList(pageNumber,pageSize);
-           
             return View(flashcardAll);
         }
         public async Task<IActionResult> UserIndex()
@@ -65,7 +64,7 @@ namespace FlashCard.Controllers
             return View(flashcardsByUser);
         }
 
-
+        [AllowAnonymous]
         // GET: Flashcards/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -137,7 +136,7 @@ namespace FlashCard.Controllers
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             int userId = int.Parse(userIdString);
 
-            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckId");
+            ViewData["DeckId"] = new SelectList(_context.Decks.Where(d => d.UserId == userId), "DeckId", "DeckName");
       
             return View(flashcard);
         }

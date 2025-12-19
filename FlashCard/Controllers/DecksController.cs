@@ -13,6 +13,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using X.PagedList.Extensions;
 
 
 namespace FlashCard.Controllers
@@ -29,8 +30,10 @@ namespace FlashCard.Controllers
 
         [Authorize]
         // GET: Decks
-        public async Task<IActionResult> AdminIndex()
+        public async Task<IActionResult> AdminIndex(int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail != "admin@gmail.com")
             {
@@ -38,8 +41,10 @@ namespace FlashCard.Controllers
                 return RedirectToAction("Login", "Users");
             }
 
-            var flashcardDbContext = _context.Decks.Include(f => f.User);
-            return View(await flashcardDbContext.ToListAsync());
+            var deckAll= _context.Decks.Include(f => f.User).Include(f => f.Flashcards)
+                .OrderBy(x => x.DeckId)
+                .ToPagedList(pageNumber, pageSize); 
+            return View(deckAll);
         }
         [Authorize]
         public async Task<IActionResult> UserIndex()
@@ -68,7 +73,10 @@ namespace FlashCard.Controllers
 
             var deck = await _context.Decks
                 .Include(d => d.User)
+                .Include(d => d.Flashcards)
+                .Include(d=>d.Flashcards).ThenInclude(f=>f.CardPairs)
                 .FirstOrDefaultAsync(m => m.DeckId == id);
+
             if (deck == null)
             {
                 return NotFound();
@@ -154,6 +162,8 @@ namespace FlashCard.Controllers
                         throw;
                     }
                 }
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                if (userEmail == "admin@gmail.com") { return RedirectToAction(nameof(AdminIndex)); }
                 return RedirectToAction(nameof(UserIndex));
             }
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email", deck.UserId);

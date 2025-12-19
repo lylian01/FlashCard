@@ -21,7 +21,7 @@
 {
     <div class="card cardCus col-5 mx-auto pe-3 rounded-3 ps-1">
         <div class="card-body row align-items-center">
-            <div class="col-10">
+            <div class="col-md-9">
                 <div class="d-flex flex-col ">
                     <a asp-action="Edit" asp-route-id="@item.CardId" class="text-decoration-none text-black">
                     <div class="fs-6">
@@ -43,7 +43,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-1">
+            <div class="col col-md-3 d-flex justify-content-end">
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteId('@item.CardId','@item.CardTitle')">
                     Delete
                 </button>
