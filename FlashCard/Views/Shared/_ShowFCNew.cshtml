@@ -1,0 +1,49 @@
+﻿@using Microsoft.EntityFrameworkCore 
+@inject FlashcardDbContext _context
+@{
+    var flashcards = _context.Flashcards
+        .Include(f => f.User).Include(f => f.CardPairs)
+        .OrderByDescending(d => d.CardId)
+        .Take(6)
+        .ToList();
+}
+<style>
+    .divCus{
+        position: relative;
+        background: white;
+        z-index: 1;
+        color: var(--accent-dark);
+    }
+    .divCus:hover{
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid var(--accent);
+        color: var(--accent-dark);
+    }
+
+    .iconFolder {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 2rem;
+        color: var(--accent);
+        z-index: 2;
+        transform: rotate(-8deg) translateX(-20px);
+    }
+</style>
+<div class="row d-flex gap-3  justify-content-center">
+    @foreach (var item in flashcards)
+    {
+            <div class="col-3 p-2 rounded-2 divCus">
+            <h5> @item.CardTitle</h5>
+            <div class="fs-6">@item.CardPairs.Count() temps</div>
+            <div class="fs-5"> by @item.User.Username</div>
+            <div class="iconFolder">
+                <i class=" bi bi-card-list"></i>
+            </div>
+        </div>
+    }
+</div>
+

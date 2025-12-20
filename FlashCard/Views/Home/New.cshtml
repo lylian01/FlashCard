@@ -5,10 +5,287 @@
     ViewData["Title"] = "New Flash Card";
     Layout = null;
 }
-<h4> ko có j hết
-</h4>
-<h4>
-    đăng nhập để trải nghiệm 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/FlashCard.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-bottom: 0;
+        }
 
-</h4>
-<a href="./Users/Login">Login</a>
+        .landing-container {
+            width: 100%;
+        }
+
+        .hero-wrapper {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(111, 78, 55, 0.1);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            padding: 80px 60px;
+            align-items: center;
+        }
+
+        .hero-left h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-dark);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-left .subtitle {
+            font-size: 1.3rem;
+            color: var(--secondary-dark);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn-login {
+            background: var(--accent);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(111, 78, 55, 0.3);
+        }
+
+            .btn-login:hover {
+                background: var(--accent-dark);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(111, 78, 55, 0.4);
+            }
+
+        .btn-create{
+            width: max-content;
+            background: white;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 18px 45px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .btn-create:hover{
+                background: var(--accent-dark);
+                color:white;
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(111, 78, 55, 0.4);
+        }
+        .hero-right {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-stack {
+            position: relative;
+             width: 280px; 
+            height: 350px;
+        }
+
+        .demo-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            border: 3px solid var(--secondary);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+            .demo-card .icon {
+                font-size: 3rem;
+                margin-bottom: 20px;
+            }
+
+            .demo-card .text {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--accent-dark);
+                text-align: center;
+            }
+
+            .demo-card:nth-child(1) {
+                transform: rotate(-8deg) translateX(-20px);
+                z-index: 1;
+            }
+
+            .demo-card:nth-child(2) {
+                transform: rotate(0deg);
+                z-index: 2;
+                background: white;
+            }
+
+            .demo-card:nth-child(3) {
+                transform: rotate(8deg) translateX(20px);
+                z-index: 1;
+            }
+
+        .card-stack:hover .demo-card:nth-child(1) {
+            transform: translateX(-240px);
+            background: white;
+        }
+
+        .card-stack:hover .demo-card:nth-child(3) {
+            transform: translateX(240px);
+            background: white;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+            .feature-item:hover {
+                transform: translateY(-5px);
+                border-color: var(--secondary);
+                box-shadow: 0 10px 30px rgba(111, 78, 55, 0.15);
+            }
+
+            .feature-item .icon {
+                font-size: 3rem;
+                color: var(--accent);
+                margin-bottom: 20px;
+            }
+
+            .feature-item h3 {
+                font-size: 1.3rem;
+                font-weight: 600;
+                color: var(--accent-dark);
+                margin-bottom: 10px;
+            }
+
+            .feature-item p {
+                color: var(--secondary-dark);
+                line-height: 1.6;
+                margin: 0;
+            }
+    </style>
+</head>
+<body>
+    <div class="landing-container">
+        <div class="hero-wrapper row">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1>FlashCard</h1>
+                    <p class="subtitle">The easiest way to make and study flashcards</p>
+                    <button class="btn-login" onclick="handleLogin()">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Login now 
+                    </button>
+                </div>
+
+                <div class="hero-right">
+                    <div class="card-stack">
+                        <div class="demo-card">
+                            <div class="icon">📚</div>
+                            <div class="text">Study</div>
+                        </div>
+                        <div class="demo-card">
+                            <div class="icon">🎯</div>
+                            <div class="text">Remember</div>
+                        </div>
+                        <div class="demo-card">
+                            <div class="icon">⭐</div>
+                            <div class="text">Success</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="features mb-5">
+            <div class="feature-item">
+                <div class="icon">
+                    <i class="bi bi-collection"></i>
+                </div>
+                <h3>Make flashcards </h3>
+                <p>Creating your own set of flashcards is simple</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon"> 
+                    <i class="bi bi-archive"></i>
+                </div>
+                <h3>Make deck </h3>
+                <p>Easily manage identical card sets</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+                <h3>Smart learning</h3>
+                <p>Study with spaced repetition algorithm</p>
+            </div>
+        </div>
+        <div class="mb-3 d-flex flex-column ">
+            @await Html.PartialAsync("_ShowFCNew")
+            <button class="btn-create mt-3 mx-auto" onclick="handleLogin()" >
+                <i class="bi bi-box-arrow-in-right"></i>
+                Create Flash Card 
+            </button>
+        </div>
+    </div>
+    <footer class="border-top footer text-muted text-center landing-container ">
+        <div >
+            &copy; 2025 - FlashCard - LYLIAN
+        </div>
+    </footer>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+           function handleLogin() {
+               // Thay đổi URL này thành route đăng nhập của bạn
+               window.location.href = '/Users/Login';
+           }
+    </script>
+</body>
+</html>
