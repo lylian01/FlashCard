@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
+using X.PagedList.Extensions;
 
 namespace FlashCard.Controllers
 {
@@ -20,16 +21,20 @@ namespace FlashCard.Controllers
 
         // GET: Users
         [Authorize]
-        public async Task<IActionResult> UsersIndex()
+        public async Task<IActionResult> UsersIndex(int? page)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail != "admin@gmail.com")
             {
                 ModelState.AddModelError("", "Sai thông tin đăng nhập vào admin.");
                 return RedirectToAction("Login", "Users");
             }
-
-            return View(await _context.Users.ToListAsync());
+            var usersAll = _context.Users
+                .OrderBy(x => x.UserId)
+                .ToPagedList(pageNumber, pageSize);
+            return View(usersAll);
         }
 
         // GET: Users/Details/5

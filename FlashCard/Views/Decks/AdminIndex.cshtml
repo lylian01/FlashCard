@@ -105,7 +105,9 @@
 }
     </tbody>
 </table>
-@Html.PagedListPager(
+@if (Model.PageCount > 1)
+{
+    @Html.PagedListPager(
 Model,
 page => Url.Action("AdminIndex", new { page }),
     new PagedListRenderOptions
@@ -115,6 +117,8 @@ page => Url.Action("AdminIndex", new { page }),
         PageClasses = new[] { "page-link" }
     }
 )
+}
+
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
