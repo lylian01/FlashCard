@@ -8,7 +8,7 @@
     var flashcards = _context.Flashcards
         .Where(u => u.UserId == Int32.Parse(userId))
         .OrderByDescending(d => d.CardId)
-        .Take(4)
+        .Take(3)
         .ToList();
 }
 @foreach (var item in flashcards)

@@ -75,7 +75,7 @@ body {
     }
 
 .nav-section {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem 0 1rem;
 }
 
 .nav-section-title {
@@ -153,7 +153,6 @@ body {
 .divider {
     height: 1px;
     background: rgba(241, 231, 208, 0.1);
-    margin: 1rem 0;
 }
 /* Custom scrollbar cho sidebar */
 .sidebar::-webkit-scrollbar {
@@ -191,16 +190,16 @@ body {
     .sidebar.collapsed .folder-item span,
     .sidebar.collapsed .btn-new-folder span,
     .sidebar.collapsed .nav-section-title,
-    .sidebar.collapsed .divider {
+    .sidebar.collapsed .divider{
         display: none;
-    }
+    
 
-    .sidebar.collapsed .nav-link-cus,
-    .sidebar.collapsed .folder-item,
-    .sidebar.collapsed .btn-new-folder {
-        justify-content: center;
-        padding: 0.75rem 0.5rem;
-    }
+        .sidebar.collapsed .nav-link-cus,
+        .sidebar.collapsed .folder-item,
+        .sidebar.collapsed .btn-new-folder {
+            justify-content: center;
+            padding: 0.75rem 0.5rem;
+        }
 
         .sidebar.collapsed .nav-link-cus i,
         .sidebar.collapsed .folder-item i,

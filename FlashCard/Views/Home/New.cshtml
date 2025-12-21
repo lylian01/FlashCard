@@ -24,16 +24,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            margin-bottom: 0;
+            padding: 0;
+            margin: 0;
         }
 
         .landing-container {
-            width: 100%;
+             width: 100%;
         }
 
         .hero-wrapper {
             background: white;
+            margin: 0 40px;
             border-radius: 30px;
             box-shadow: 0 10px 40px rgba(111, 78, 55, 0.1);
             overflow: hidden;
@@ -42,7 +43,6 @@
         .hero-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
             padding: 80px 60px;
             align-items: center;
         }
@@ -95,10 +95,10 @@
             font-weight: 600;
         }
         .btn-create:hover{
-                background: var(--accent-dark);
-                color:white;
-                transform: translateY(-3px);
-                box-shadow: 0 8px 25px rgba(111, 78, 55, 0.4);
+            background: var(--accent-dark);
+            color:white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(111, 78, 55, 0.4);
         }
         .hero-right {
             position: relative;
@@ -109,7 +109,7 @@
 
         .card-stack {
             position: relative;
-             width: 280px; 
+            width: 280px; 
             height: 350px;
         }
 
@@ -169,10 +169,10 @@
 
         .features {
             display: grid;
+            margin: 60px 40px 0 40px;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin-top: 60px;
-        }
+    }
 
         .feature-item {
             background: white;
@@ -211,7 +211,7 @@
 </head>
 <body>
     <div class="landing-container">
-        <div class="hero-wrapper row">
+        <div class="hero-wrapper row mt-5">
             <div class="hero-content">
                 <div class="hero-left">
                     <h1>FlashCard</h1>
@@ -240,7 +240,7 @@
                 </div>
             </div>
         </div>
-        <div class="features mb-5">
+        <div class="features">
             <div class="feature-item">
                 <div class="icon">
                     <i class="bi bi-collection"></i>
@@ -263,9 +263,10 @@
                 <p>Study with spaced repetition algorithm</p>
             </div>
         </div>
-        <div class="mb-3 d-flex flex-column ">
+        <div class="mb-3 d-flex flex-column px-3 " style="background:var(--accent);margin: 60px 40px 0 40px;border-radius: 20px;">
+            <h1 class="text-white mx-auto pt-5 pb-4">Explore flashcards</h1>
             @await Html.PartialAsync("_ShowFCNew")
-            <button class="btn-create mt-3 mx-auto" onclick="handleLogin()" >
+            <button class="btn-create my-4  mx-auto" onclick="handleLogin()" >
                 <i class="bi bi-box-arrow-in-right"></i>
                 Create Flash Card 
             </button>

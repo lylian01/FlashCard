@@ -22,7 +22,7 @@
                 </div>
                 <!-- Main Navigation -->
                 <nav class="nav-section">
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled m-0">
                         <li>
                             <a asp-controller="Home" asp-action="Index" class="nav-link-cus">
                                 <i class="bi bi-house-door-fill"></i>
@@ -36,9 +36,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="../Progresses/UserIndex" class="nav-link-cus">
+                            <a asp-controller="Flashcards" asp-action="UserIndex" class="nav-link-cus">
                                 <i class="bi bi-bookmark-fill"></i>
-                                <span>Progresses</span>
+                                <span>Flashcards</span>
                             </a>
                         </li>
                     </ul>
@@ -50,6 +50,12 @@
                 <div class="nav-section">
                     <h3 class="nav-section-title">My Flash Card</h3>
                     @await Html.PartialAsync("_DeckListPartial") 
+                </div>
+                <div class="divider mx-2"></div>
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Quick create</h3>
+                   <a asp-controller="Flashcards" asp-action="Create" class="nav-link-cus">Flash card</a>
+                   <a asp-controller="Decks" asp-action="Create" class="nav-link-cus">Deck</a>
                 </div>
             </div>
             <!-- Main Content - 10 columns -->

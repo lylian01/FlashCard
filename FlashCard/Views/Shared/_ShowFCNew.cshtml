@@ -2,7 +2,7 @@
 @inject FlashcardDbContext _context
 @{
     var flashcards = _context.Flashcards
-        .Include(f => f.User).Include(f => f.CardPairs)
+        .Include(f => f.User).Include(f => f.CardPairs).Where(f => f.IsPublic == true)
         .OrderByDescending(d => d.CardId)
         .Take(6)
         .ToList();
@@ -11,6 +11,7 @@
     .divCus{
         position: relative;
         background: white;
+        border-radius: 20px;
         z-index: 1;
         color: var(--accent-dark);
     }
@@ -22,6 +23,10 @@
         border: 1px solid var(--accent);
         color: var(--accent-dark);
     }
+    .divCus:hover .iconFolder{
+        font-size: 3rem;
+        transition: all 0.7s ease;
+    }
 
     .iconFolder {
         position: absolute;
@@ -32,11 +37,12 @@
         z-index: 2;
         transform: rotate(-8deg) translateX(-20px);
     }
+
 </style>
 <div class="row d-flex gap-3  justify-content-center">
     @foreach (var item in flashcards)
     {
-            <div class="col-3 p-2 rounded-2 divCus">
+            <div class="col-3 p-3  divCus">
             <h5> @item.CardTitle</h5>
             <div class="fs-6">@item.CardPairs.Count() temps</div>
             <div class="fs-5"> by @item.User.Username</div>
