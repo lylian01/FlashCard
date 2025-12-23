@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@inject FlashcardDbContext _context
+@{
+    var nameUser = User.FindFirstValue(ClaimTypes.Name);
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -54,8 +60,14 @@
                 <div class="divider mx-2"></div>
                 <div class="nav-section">
                     <h3 class="nav-section-title">Quick create</h3>
-                   <a asp-controller="Flashcards" asp-action="Create" class="nav-link-cus">Flash card</a>
-                   <a asp-controller="Decks" asp-action="Create" class="nav-link-cus">Deck</a>
+                    <a asp-controller="Flashcards" asp-action="Create" class="nav-link-cus">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Flashcards</span>
+                    </a>
+                    <a asp-controller="Decks" asp-action="Create" class="nav-link-cus">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span>Deck</span>
+                    </a>
                 </div>
             </div>
             <!-- Main Content - 10 columns -->
@@ -63,30 +75,35 @@
                 <header>
                     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                         <div class="container-fluid">
-                            <h4>FlashCard</h4>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                                    aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                                <ul class="navbar-nav flex-grow-1">
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                                    </li>
-                                    
-                                </ul>
-                                <div>
-                                    <a asp-action="Create">Create New</a>
+                            <div class="col-2">
+                                <h4 style="color: var(--accent) " class="navbar-brand mb-0 h1 fw-bold">FlashCard</h4>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                        aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <div class="flex-grow-1 mx-auto d-none d-md-block" style="max-width: 500px;">
+                                    <div class="input-group">
+                                        <input id="textSearch" type="text" class="form-control ps-2" placeholder="Tìm kiếm flashcards...">
+                                        <span class="input-group-text bg-white " onclick="search()">
+                                           <i class="bi bi-search text-secondary-custom"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="navbar-collapse collapse justify-content-end col-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="user-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                                             style="width: 45px;height: 45px;background-color: var(--secondary);">
+                                        @nameUser.ToUpper().Substring(0, 2)
+                                        </div>
+                                    <span class="fw-semibold text-accent-dark">@nameUser</span>
+                                    </div>
                                     <form asp-controller="Users" asp-action="Logout" method="post">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-link">LogOut</button>
                                     </form>
-                                </div>
-                                
-
                             </div>
                         </div>
                     </nav>
@@ -147,6 +164,11 @@
                 }
             });
         });
+        // onchange input search 
+       function search() {
+            var textsearch = document.getElementById("textSearch").value;
+             window.location.href = `/Flashcards/Search?key=` + encodeURIComponent(textsearch);
+       }
     </script>
 </body>
 </html>

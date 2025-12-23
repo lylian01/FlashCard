@@ -1,33 +1,195 @@
-﻿@{
+﻿@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@inject FlashcardDbContext _context
+@{
     ViewData["Title"] = "Home Page";
+    var nameUser = User.FindFirstValue(ClaimTypes.Name);
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var countDecks = _context.Decks.Where(f => f.UserId == Int32.Parse(userId)).Count();
+    var decks = _context.Decks.Include(f => f.Flashcards).Where(f => f.UserId == Int32.Parse(userId)).Take(4);
+    var countFlashCards = _context.Flashcards.Where(f => f.UserId == Int32.Parse(userId)).Count();
+    var flashcards = _context.Flashcards
+        .Include(t => t.CardPairs).Include(t => t.User)
+        .Where(t => t.UserId != Int32.Parse(userId))
+        .OrderByDescending(t => t.CardId).Take(6);
 }
+<style>
+    .darkText {color: var(--accent-dark) ;    }
+    .text-accent-dark {color: var(--accent-dark) ;    }
+    .text-secondary-custom {color: var(--secondary-dark) ;    }
+    .welcome-gradient {
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    }
 
+    /* Buttons */
+    .btn-action {
+        background: white;
+        color: var(--accent);
+        border: none;
+        transition: all 0.3s ease;
+    }
 
-<div>
-<div>
-    <h5>
-        @ViewBag.UserId |
-        @ViewBag.UserEmail
-    </h5>
-    
-</div> 
-<div>
-    <h5>Flashcards</h5>
-    <a href="../Flashcards/UserIndex">User Index</a>
-    <a href="../Flashcards/AdminIndex">AdminIndex</a>
-    <a href="../Flashcards/Create">Create Flash card</a>
-</div>
-<div>
-    <h5>user</h5>
-    <a href="../Users/Register">Register</a>
-    <a href="../Users/Login">Login</a>
-    <a href="../Users/UsersIndex">User Index</a>
-</div>
-<div>
-    <h5>deck</h5>
-    <a href="../Decks/UserIndex">UserIndex</a>
-    <a href="../Decks/AdminIndex">AdminIndex</a>
-    <a href="../Decks/Create">Create Deck</a>
-</div>
-</div>
+    .btn-action:hover {
+        background: white;
+        color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    /* Enhanced hover effects */
+    .card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        border-radius: 15px;
+    }
 
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(111, 78, 55, 0.15) !important;
+        }
+
+    .stat-card {
+        border-left: 4px solid var(--accent) !important;
+    }
+        /* View all link */
+        .view-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .view-all:hover {
+            color: var(--accent-dark);
+        }
+    .deck-card:hover {
+            border-color: var(--secondary) !important;
+    }
+    /* Badge custom */
+    .badge-public {
+        background-color: var(--secondary);
+    }
+    .badge-cards {
+        background-color: var(--primary);
+        color: var(--accent);
+    }
+
+    .flashcard-item {
+        border-left: 4px solid var(--secondary) !important;
+    }
+
+        .flashcard-item:hover {
+            transform: translateX(5px);
+        }
+
+</style>
+<div class="p-3">
+    <!-- Welcome Section -->
+    <div class="card welcome-gradient text-white mb-4 shadow border-0">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="display-5 fw-bold mb-3">👋 Welcome back, @nameUser.ToUpper()!</h1>
+            <p class="lead mb-4 opacity-75">Ready to continue your learning journey</p>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    <a asp-controller="Decks" asp-action="Create" class="text-decoration-none" style="color: var(--accent);">
+                            Create Deck 
+                        </a>
+                </button>
+                <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold">
+                    <i class="bi bi-card-list me-2"></i>
+                    <a asp-controller="Flashcards" asp-action="Create" class="text-decoration-none" style="color: var(--accent);">
+                        Create Flashcard
+                    </a>
+                </button>
+                <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold" onclick="location.href='#explore'">
+                    <i class="bi bi-globe me-2"></i>Explore
+                </button>
+            </div>
+        </div>  
+    </div>
+    <!-- Statistics -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-5">
+            <div class="card stat-card h-100 shadow-sm border-0">
+                <div class="card-body p-3">
+                    <div class="fs-1 mb-3">🎴</div>
+                    <h2 class="display-4 fw-bold text-accent-dark mb-2">@countFlashCards</h2>
+                    <p class="text-secondary-custom mb-0 fw-medium">Total Flashcards</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-5">
+            <div class="card stat-card h-100 shadow-sm border-0">
+                <div class="card-body p-3">
+                    <div class="fs-1 mb-3">📚</div>
+                    <h2 class="display-4 fw-bold text-accent-dark mb-2">@countDecks</h2>
+                    <p class="text-secondary-custom mb-0 fw-medium">Total Decks</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Your Recent Decks -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h3 fw-bold text-accent-dark mb-0">📚 Your Recent Decks</h2>
+        <a asp-controller="Decks" asp-action="UserIndex" class="view-all">
+            See more <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="row g-3 mb-5 d-flex flex-row ">
+        @foreach (var item in decks)
+        {
+            <div class="col-6 col-md-3">
+                <a asp-controller="Decks" asp-action="Details" asp-route-id="@item.DeckId" class="text-decoration-none">
+                <div class="card deck-card h-100 shadow-sm border-0">
+                    <div class="card-body p-4">
+
+                        <h5 class="card-title fw-semibold text-accent-dark mb-3">
+                            <i class="bi bi-collection me-2"></i>@item.DeckName
+                        </h5>
+                        <p class="card-text text-secondary-custom small mb-4">@item.Description</p>
+                        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                            <small class="text-secondary-custom">
+                                <i class="bi bi-person me-1"></i>You
+                            </small>
+                            <span class="badge badge-cards rounded-pill px-3 py-2 fw-semibold">@item.Flashcards.Count() flashcard</span>
+                        </div>
+                    </div>
+                    </div>
+                </a>
+            </div>
+          }
+    </div>
+    <!-- Public Flashcards from Others -->
+    <div class="d-flex justify-content-between align-items-center mb-3" id="explore">
+        <h2 class="h3 fw-bold text-accent-dark mb-0">🌍 Explore more flash cards</h2>
+        <a asp-controller="Flashcards" asp-action="Search" class="view-all">
+            See more <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="row g-3">
+        @foreach(var item in flashcards)
+        {
+            <div class="col-sm-6 col-lg-4">
+                <a asp-controller="Flashcards" asp-action="Details" asp-route-id="@item.CardId" class="text-decoration-none">
+                    <div class="card flashcard-item h-100 shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-semibold text-accent-dark mb-2">
+                                <i class="bi bi-card-list me-2"></i>@item.CardTitle
+                            </h5>
+                            <p class="card-text text-secondary-custom small mb-3">@item.CardDescription</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-secondary-custom">
+                                    <i class="bi bi-person me-1"></i>@item.User.Username
+                                </small>
+                                <span class="badge badge-public text-white rounded-pill px-3 py-1 fw-semibold">🌍 Public</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+<script>
+
+</script>

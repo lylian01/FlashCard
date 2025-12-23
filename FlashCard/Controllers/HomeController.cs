@@ -23,8 +23,6 @@ namespace FlashCard.Controllers
 
         public IActionResult Index()
         {
-            ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewData["UserEmail"] = User.FindFirstValue(ClaimTypes.Email);
             return View();
         }
         

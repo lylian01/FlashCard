@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using X.PagedList;
 using X.PagedList.Extensions;
+using System.Net.WebSockets;
 
 namespace FlashCard.Controllers
 {
@@ -62,6 +63,31 @@ namespace FlashCard.Controllers
                 .ToListAsync();
 
             return View(flashcardsByUser);
+        }
+        public async Task<IActionResult> Search(string? key)
+        {
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var fcAllPublicNotUser = _context.Flashcards
+                .Include(f => f.CardPairs)
+                .Include(f => f.User)
+                .Where(f => f.UserId != int.Parse(userIdString) && f.IsPublic == true).AsQueryable();
+            var fcUser = _context.Flashcards
+                .Include(f => f.CardPairs)
+                .Include(f => f.User)
+                .Where(f => f.UserId == int.Parse(userIdString)).AsQueryable();
+
+            var flashcardByKey = fcAllPublicNotUser.Union(fcUser); 
+
+            if (!string.IsNullOrEmpty(key))
+            {
+                flashcardByKey = flashcardByKey
+                    .Where(s => s.CardTitle!.ToUpper().Contains(key.ToUpper()));
+            }
+
+            var result = await flashcardByKey.Take(20).ToListAsync();
+            ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return View(result);
         }
 
         [AllowAnonymous]
