@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using X.PagedList.Extensions;
+
 
 namespace FlashCard.Controllers
 {
@@ -177,7 +179,9 @@ namespace FlashCard.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                // refresh claims
+                
+                return RedirectToAction("Index","Home");
             }
             return View(user);
         }

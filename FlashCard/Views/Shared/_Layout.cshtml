@@ -93,12 +93,14 @@
                                 </div>
                             </div>
                             <div class="navbar-collapse collapse justify-content-end col-4">
-                                    <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center gap-3 mx-2">
                                         <div class="user-avatar rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
                                              style="width: 45px;height: 45px;background-color: var(--secondary);">
                                         @nameUser.ToUpper().Substring(0, 2)
                                         </div>
-                                    <span class="fw-semibold text-accent-dark">@nameUser</span>
+                                    <a asp-controller="Users" asp-action="Edit" asp-route-id="@userId" class="text-decoration-none">
+                                        <span class="fw-semibold text-accent-dark">@nameUser</span>
+                                    </a>
                                     </div>
                                     <form asp-controller="Users" asp-action="Logout" method="post">
                                         @Html.AntiForgeryToken()

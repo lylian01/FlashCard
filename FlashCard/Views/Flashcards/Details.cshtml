@@ -85,10 +85,13 @@
         </div>
         <div class="d-flex gap-3">
             <div>
-                <a asp-action="Edit" asp-route-id="@Model?.CardId" style="color: var(--accent-dark); text-decoration:none;">
+                @if((Model.UserId.ToString() == ViewBag.UserId) )
+                {
+                    <a asp-action="Edit" asp-route-id="@Model?.CardId" style="color: var(--accent-dark); text-decoration:none;">
                     <i class="bi bi-pencil-square"></i>
                     Edit
                 </a>
+                }
             </div>
             <div data-bs-toggle="modal" data-bs-target="#infoShow" style="cursor:pointer;">
                 <i class="bi bi-info-circle"></i>

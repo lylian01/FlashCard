@@ -108,6 +108,7 @@ namespace FlashCard.Controllers
             {
                 return NotFound();
             }
+            ViewData["UserId"] = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             return View(flashcard);
         }
