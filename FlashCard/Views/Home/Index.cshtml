@@ -87,8 +87,31 @@
     <div class="card welcome-gradient text-white mb-4 shadow border-0">
         <div class="card-body p-4 p-md-5">
             <h1 class="display-5 fw-bold mb-3">👋 Welcome back, @nameUser.ToUpper()!</h1>
-            <p class="lead mb-4 opacity-75">Ready to continue your learning journey</p>
-            <div class="d-flex gap-2 flex-wrap">
+            @if(userId == "4")
+            {
+                <span class="lead mb-4 opacity-75 me-2">Take more actions</span>
+                <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold me-2">
+                    <a asp-controller="Users" asp-action="UsersIndex" class="text-decoration-none" style="color: var(--accent);">
+                        <i class="bi bi-globe me-2"></i>See All User
+                    </a>
+                </button>
+                <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold me-2">
+                    <a asp-controller="Decks" asp-action="AdminIndex" class="text-decoration-none" style="color: var(--accent);">
+                        <i class="bi bi-globe me-2"></i>See All Deck
+                    </a>
+                </button>
+                <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold">
+                    <a asp-controller="Flashcards" asp-action="AdminIndex" class="text-decoration-none" style="color: var(--accent);">
+                        <i class="bi bi-globe me-2"></i>See All Flash Card
+                    </a>
+                </button>
+            }
+            else
+            {
+                <p class="lead mb-4 opacity-75">Ready to continue your learning journey</p>
+            }
+            
+            <div class="d-flex gap-2 flex-wrap mt-3">
                 <button class="btn btn-action px-4 py-2 rounded-3 fw-semibold">
                     <i class="bi bi-plus-circle me-2"></i>
                     <a asp-controller="Decks" asp-action="Create" class="text-decoration-none" style="color: var(--accent);">

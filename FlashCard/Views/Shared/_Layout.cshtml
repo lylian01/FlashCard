@@ -102,7 +102,11 @@
                                     </div>
                                     <form asp-controller="Users" asp-action="Logout" method="post">
                                         @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-link">LogOut</button>
+                                    <button type="submit" class="btn btn-link ms-2 border text-decoration-none " 
+                                            style="color:var(--accent-dark);">
+                                        LogOut
+                                        <i class="bi bi-box-arrow-right"></i>
+                                    </button>
                                     </form>
                             </div>
                         </div>

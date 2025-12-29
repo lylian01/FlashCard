@@ -6,39 +6,42 @@
 
 <h1>Edit</h1>
 
-<h4>User</h4>
+<style>
+    span.textEmail > a {
+        color: var(--accent-dark);
+        text-decoration:none;
+    }
+</style>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="UserId" />
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="fs-4 fw-bold mb-2">
+        <span>Email user :</span>
+        <span class="textEmail">
+            @Html.DisplayFor(model => model.Email)
+        </span>
+    </div>
+  
+     <form asp-action="Edit" class="col-md-5">
+        <input type="hidden" asp-for="UserId" />
+        <div class="mb-3">
+            <h5>Name user </h5>
+            <input asp-for="Username" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <h5>Password </h5>
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="float-end">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+       
+     </form>
+    
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
