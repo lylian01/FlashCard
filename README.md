@@ -1,7 +1,7 @@
-Web Flash Card 
-+ Được viết bằng : HTML CSS JS - Boostrap 5
-+ Theo mô hình ASP.NET Core MVC
-+ Database code first quản lý trên SQL Server local 
-Web cho phép thực hiện các thao tác tạo các bộ thẻ , có thể thêm vào danh mục , có user .
-Xem đemo web theo đường link bên dưới :
+Web Flash Card
++ Built with: HTML CSS JS - Bootstrap 5
++ Following the ASP.NET Core MVC model
++ Database managed with code first approach on local SQL Server
+The web allows creating card sets, adding to categories, and has user functionality.
+Watch the web demo at the link below:
 https://www.youtube.com/watch?v=74ftGQHD7rg
